@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <script lang="javascript">
+            var page = 1;
+
+            function nextPage(){
+                page = page + 1;
+                fetchCharacters(page);
+            }
+
+            function previousPage(){
+                if(page > 1){
+                    page = page - 1;
+                }
+                fetchCharacters(page);
+            }
+
+            function fetchCharacters(page){
+                fetch(`https:/rickandmortyapi.com/api/character/?page=${page}`)
+                .then(data => data.json())
+                .then(chars => {
+                    var container = document.getElementById("characters");
+                    container.innerHTML="";
+                    for(var char of chars.results){
+                        container.innerHTML+=`
+                        <div class = "char">
+                            <img src="${char.image}"/><br/>
+                            <span>${char.name}</span>
+                        </div>    
+                        `
+                    }
+                    
+                })
+            }
+
+            function searchCharacter(){
+                var value = document.getElementById("character").value;
+
+                fetch(`https:/rickandmortyapi.com/api/character/?name=${value}`)
+                .then(data => data.json())
+                .then(chars => {
+                    var container = document.getElementById("characters");
+                    container.innerHTML="";
+                    for(var char of chars.results){
+                        container.innerHTML+=`
+                        <div class = "char">
+                            <img src="${char.image}"/><br/>
+                            <span>${char.name}</span>
+                        </div>    
+                        `
+                    }
+                })
+            }
+        
+        </script>
+        <link rel ="stylesheet" href="./style.css"/>
+        <title>Mi primera web</title>
+    </head>
+
+    <body onload = "fetchCharacters(page)">
+        <h1> Rick & Morty</h1>
+        <input id = "character"/><button onclick="searchCharacter()">Buscar</button>
+        <div id = "characters"></div>
+        <button onclick="previousPage()">previous</button>&nbsp;<button onclick="nextPage()">Next</button>
+    </body>
+
+</html>
